@@ -114,6 +114,8 @@ function drawComputer()
 
 function deal()
 {
+    computerAces = 0;
+    playerAces = 0;
     document.getElementById('deal').disabled = true;
     var cards = document.getElementsByClassName('card');
     var numCards = cards.length;
