@@ -1,10 +1,16 @@
 /**
  * Created by josephthomaschaske on 2/18/16.
  */
-var playerScore = 0;
-var computerScore = 0;
-var deck = makeDeck();
+var playerScore;
+var computerScore;
+var deck;
 
+var playerAces;
+var computerAces;
+
+window.onload = function(){
+    deal();
+}
 function makeDeck()
 {
     var deck = [];
@@ -47,6 +53,9 @@ function createCardDiv(card)
 function drawPlayer()
 {
     var card = deck.shift();
+    if(card[0] == 1)
+        playerAces++;
+
     if(card[0] > 1 && card[0] < 10)
         playerScore += card[0];
     else if(card[0] >= 10)
@@ -56,11 +65,89 @@ function drawPlayer()
     var cards = document.getElementById('player-cards');
     cards.appendChild(createCardDiv(card));
     var score = document.getElementById('player-score');
-
+    if(playerScore > 21)
+    {
+        while(playerAces > 0 && playerScore > 21)
+        {
+            playerScore -= 10;
+            playerAces--;
+        }
+    }
     if(playerScore < 21)
         score.innerText = playerScore;
     else if(playerScore == 21)
         score.innerText = "BLACK JACK!";
     else
         score.innerText = "BUST!";
+}
+
+function drawComputer()
+{
+    var card = deck.shift();
+    if(card[0] == 1)
+        computerAces++;
+
+    if(card[0] > 1 && card[0] < 10)
+        computerScore += card[0];
+    else if(card[0] >= 10)
+        computerScore += 10;
+    else
+        computerScore += 11;
+    var cards = document.getElementById('computer-cards');
+    cards.appendChild(createCardDiv(card));
+    var score = document.getElementById('computer-score');
+    if(computerScore > 21)
+    {
+        while(computerAces > 0 && computerScore > 21)
+        {
+            computerScore -= 10;
+            computerAces--;
+        }
+    }
+    if(computerScore < 21)
+        score.innerText = computerScore;
+    else if(computerScore == 21)
+        score.innerText = "BLACK JACK!";
+    else
+        score.innerText = "BUST!";
+}
+
+function deal()
+{
+    document.getElementById('deal').disabled = true;
+    var cards = document.getElementsByClassName('card');
+    var numCards = cards.length;
+    for(var i = 0; i < numCards; ++i)
+    {
+        cards[0].parentNode.removeChild(cards[0]);
+    }
+    document.getElementById('hit').disabled = false;
+    document.getElementById('stay').disabled = false;
+    document.getElementById('status').innerText = '';
+    document.getElementById('player-score').innerText = 0;
+    document.getElementById('computer-score').innerText = 0;
+    playerScore = 0;
+    computerScore = 0;
+    deck = makeDeck();
+    shuffle(deck);
+
+    drawPlayer();
+    drawComputer();
+    drawPlayer();
+}
+
+function playComputer()
+{
+    while(computerScore < 17)
+    {
+        drawComputer();
+    }
+    document.getElementById('hit').disabled = true;
+    document.getElementById('stay').disabled = true;
+    document.getElementById('deal').disabled = false;
+    var status = document.getElementById('status');
+    if(computerScore == 21 || playerScore > 21 || (computerScore > playerScore && computerScore < 22))
+        status.innerText = 'House Wins!';
+    else
+        status.innerText = 'Player Wins!';
 }

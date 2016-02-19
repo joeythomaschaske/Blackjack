@@ -1,0 +1,35 @@
+#container {
+    width: 800px;
+    height: 413px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin:-100px 0 0 -150px;
+}
+
+button {
+    padding: 20px;
+    background-color: white;
+    border-color: #ccc;
+    border-radius: 3px;
+    line-height: 1.5;
+}
+
+.card {
+    display: inline-block;
+    height: 98px;
+    width: 72px;
+}
+
+#player-score:before, #computer-score:before {
+    content: "Score: "
+}
+
+button[disabled]{
+    background-color: #eeeeee;
+    cursor: not-allowed;
+}
+
+body {
+    background-color: #277714;
+}
